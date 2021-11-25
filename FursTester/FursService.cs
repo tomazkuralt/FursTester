@@ -235,6 +235,7 @@ namespace Agitavit.FormNet.Infrastructure.Integrations
             signedXml.SignedInfo.SignatureMethod = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256";
 
             //Console.WriteLine($"BEFORE: {signedXml.ExObjectToJson()}");
+            Console.WriteLine($"Verifying cert... Result: {signCert.Verify()}");
 
             // Compute the signature.            
             signedXml.ComputeSignature();
@@ -281,6 +282,8 @@ namespace Agitavit.FormNet.Infrastructure.Integrations
             //var rsaCSP = (RSACryptoServiceProvider)signCert.GetRSAPrivateKey();
             //var tmp2 = (RSACryptoServiceProvider)tmp;
 
+
+
             CspParameters cspParameters = new CspParameters();
             //cspParameters.KeyContainerName = rsaCSP.CspKeyContainerInfo.KeyContainerName; //signCert.GetNameInfo(X509NameType.SimpleName, false);
             //cspParameters.KeyNumber = rsaCSP.CspKeyContainerInfo.KeyNumber == KeyNumber.Exchange ? 1 : 2; //1;
@@ -322,6 +325,8 @@ namespace Agitavit.FormNet.Infrastructure.Integrations
             signedXml.SignedInfo.SignatureMethod = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256";
 
             //Console.WriteLine($"BEFORE: {signedXml.ExObjectToJson()}");
+
+            Console.WriteLine($"Verifying cert... Result: {signCert.Verify()}");
 
             // Compute the signature.            
             signedXml.ComputeSignature();
@@ -377,10 +382,12 @@ namespace Agitavit.FormNet.Infrastructure.Integrations
             var el = "fu:BusinessPremiseRequest";
             if (Convert.ToBoolean(configuration["UseFromStorage"]))
             {
+                Console.WriteLine("Using certificate from storage.");
                 xmlDoc = this.SignXmlSha256(xmlDoc, signCert, "#data", el);
             }
             else
             {
+                Console.WriteLine("Using certificate from file.");
                 xmlDoc = this.SignXmlSha2562(xmlDoc, configuration["TP_CertFilePath"], configuration["TP_CertPassword"], "#data", el);
             }
             
